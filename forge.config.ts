@@ -13,15 +13,17 @@ const config: ForgeConfig = {
     appCategoryType: "public.app-category.developer-tools",
     asar: true,
     extraResource: ["vendor/opencode2"],
-    ...(process.env.APPLE_IDENTITY ? { osxSign: {} } : {}),
-    ...(process.env.APPLE_ID &&
-    process.env.APPLE_PASSWORD &&
-    process.env.APPLE_TEAM_ID
+    ...(process.env.APPLE_IDENTITY
+      ? { osxSign: { identity: process.env.APPLE_IDENTITY } }
+      : {}),
+    ...(process.env.APPLE_API_KEY_PATH &&
+    process.env.APPLE_API_KEY_ID &&
+    process.env.APPLE_API_ISSUER
       ? {
           osxNotarize: {
-            appleId: process.env.APPLE_ID,
-            appleIdPassword: process.env.APPLE_PASSWORD,
-            teamId: process.env.APPLE_TEAM_ID,
+            appleApiKey: process.env.APPLE_API_KEY_PATH,
+            appleApiKeyId: process.env.APPLE_API_KEY_ID,
+            appleApiIssuer: process.env.APPLE_API_ISSUER,
           },
         }
       : {}),

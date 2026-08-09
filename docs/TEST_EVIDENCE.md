@@ -29,7 +29,7 @@ The disposable project is intentionally retained for review at `/var/folders/9r/
 
 ## Blocked
 
-- Signed/notarized distribution is blocked on release credentials: the public GitHub repository currently has no `APPLE_IDENTITY`, `APPLE_ID`, `APPLE_PASSWORD`, or `APPLE_TEAM_ID` Actions secrets. The release workflow is implemented, but it has not been triggered and notarization is not claimed.
+- App Store Connect notarization credentials are configured as encrypted GitHub Actions secrets using a dedicated App Manager key. Signed/notarized distribution remains blocked only on exporting the existing Developer ID Application identity as a password-wrapped `.p12` and configuring `APPLE_CERTIFICATE_BASE64` plus `APPLE_CERTIFICATE_PASSWORD`. The release workflow has not been triggered and notarization is not claimed.
 
 ## Untested
 
