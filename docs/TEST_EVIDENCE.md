@@ -27,10 +27,11 @@ The disposable project is intentionally retained for review at `/var/folders/9r/
 - A local Developer ID packaging attempt reached macOS Keychain authorization but did not complete. No signed claim is made from that attempt.
 - The first local DMG attempt found that `macos-alias` had been compiled for the host Node 26 ABI while Forge runs on pinned Node 24. The canonical `make` command now rebuilds that exact dependency under Node 24 with a secret-stripped environment; the subsequent DMG/ZIP make passed.
 - The `v0.1.0-alpha.1` release run stopped during its duplicate quality gate because a fresh release checkout had not fetched the intentionally untracked pinned `opencode2` binary. No Apple credential or signing step ran. The canonical release workflow now performs the same checksum-verified binary bootstrap as the green Quality workflow before testing.
+- The `v0.1.0-alpha.2` release passed signing, Apple notarization, codesign verification, Gatekeeper assessment, and stapled-ticket validation, then stopped before publication because CycloneDX treated pnpm's valid Electron-patched dependency tree as `npm ls` `ELSPROBLEMS`. The pinned generator's documented ignore mode produced and validated a 644-component SBOM locally; the release gate now combines that mode with explicit validation and non-empty output assertions.
 
 ## Blocked
 
-- All signing and notarization credentials are configured as encrypted GitHub Actions secrets. The first tag stopped before credential use because of the missing binary bootstrap described above; the fixed `v0.1.0-alpha.2` release has not yet run, so notarization is not claimed.
+- All signing and notarization credentials are configured as encrypted GitHub Actions secrets. The signed and notarized `v0.1.0-alpha.2` build was not published because of the later SBOM failure described above; the fixed `v0.1.0-alpha.3` release has not yet run, so no public-release claim is made.
 
 ## Untested
 
