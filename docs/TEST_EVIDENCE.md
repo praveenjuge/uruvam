@@ -29,10 +29,11 @@ The disposable project is intentionally retained for review at `/var/folders/9r/
 - The `v0.1.0-alpha.1` release run stopped during its duplicate quality gate because a fresh release checkout had not fetched the intentionally untracked pinned `opencode2` binary. No Apple credential or signing step ran. The canonical release workflow now performs the same checksum-verified binary bootstrap as the green Quality workflow before testing.
 - The `v0.1.0-alpha.2` release passed signing, Apple notarization, codesign verification, Gatekeeper assessment, and stapled-ticket validation, then stopped before publication because CycloneDX treated pnpm's valid Electron-patched dependency tree as `npm ls` `ELSPROBLEMS`. The pinned generator's documented ignore mode produced and validated a 644-component SBOM locally; the release gate now combines that mode with explicit validation and non-empty output assertions.
 - The `v0.1.0-alpha.3` release passed signing, Apple notarization, stapling, update-manifest generation, validated SBOM generation, and checksums, then stopped before publication because the provenance action does not expand a shell-style brace glob in `subject-path`. The workflow now supplies the action's supported newline-separated artifact patterns.
+- The `v0.1.0-alpha.4` workflow completed and published signed/notarized assets with provenance, but independent download inspection found that its recursive checksum command included an unshipped internal JSON file and duplicate build paths. The release was marked as a prerelease immediately; the canonical workflow now hashes only the exact published root assets with basename-only entries and sets prerelease status during creation.
 
 ## Blocked
 
-- All signing and notarization credentials are configured as encrypted GitHub Actions secrets. The signed and notarized `v0.1.0-alpha.3` build was not published because of the later provenance-input failure described above; the fixed `v0.1.0-alpha.4` release has not yet run, so no public-release claim is made.
+- The signed and notarized `v0.1.0-alpha.4` release is public but superseded for checksum usability by the fixed `v0.1.0-alpha.5` pipeline, which has not yet run. Final public-release verification is not claimed until the replacement assets are downloaded and inspected.
 
 ## Untested
 
