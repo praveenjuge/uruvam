@@ -1,0 +1,4 @@
+interface:
+  display_name: "Test Uruvam"
+  short_description: "Run Uruvam agent and desktop quality gates"
+  default_prompt: "Use $test-uruvam to test the Uruvam desktop app end to end."
