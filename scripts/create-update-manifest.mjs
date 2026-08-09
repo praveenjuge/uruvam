@@ -1,19 +1,28 @@
 import { createHash } from "node:crypto";
-import { readdir, readFile, stat, writeFile } from "node:fs/promises";
+import { copyFile, readdir, readFile, stat, writeFile } from "node:fs/promises";
 import { basename, resolve } from "node:path";
 
-async function findZip(directory) {
+async function findArtifact(directory, suffix) {
   for (const entry of await readdir(directory, { withFileTypes: true })) {
     const path = resolve(directory, entry.name);
     if (entry.isDirectory()) {
-      const found = await findZip(path);
+      const found = await findArtifact(path, suffix);
       if (found) return found;
-    } else if (entry.name.endsWith(".zip")) return path;
+    } else if (entry.name.endsWith(suffix)) return path;
   }
 }
 
-const archive = await findZip(resolve("out"));
-if (!archive) throw new Error("No macOS ZIP found under out");
+const [nestedZip, nestedDmg] = await Promise.all([
+  findArtifact(resolve("out", "make"), ".zip"),
+  findArtifact(resolve("out", "make"), ".dmg"),
+]);
+if (!nestedZip || !nestedDmg)
+  throw new Error("Expected one macOS ZIP and DMG under out/make");
+const archive = resolve("out", basename(nestedZip));
+await Promise.all([
+  copyFile(nestedZip, archive),
+  copyFile(nestedDmg, resolve("out", basename(nestedDmg))),
+]);
 const bytes = await readFile(archive);
 const size = (await stat(archive)).size;
 const sha512 = createHash("sha512").update(bytes).digest("base64");
