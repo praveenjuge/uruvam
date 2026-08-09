@@ -80,6 +80,11 @@ jobs:
           node -e 'const bom=require("./out/uruvam.cdx.json"); if(bom.bomFormat!=="CycloneDX"||!Array.isArray(bom.components)||bom.components.length===0) process.exit(1)'
       - run: find out -type f \( -name '*.zip' -o -name '*.dmg' -o -name '*.json' -o -name 'latest-mac.yml' \) -print0 | xargs -0 shasum -a 256 > out/SHA256SUMS
       - uses: actions/attest-build-provenance@v3
-        with: { subject-path: "out/*.{zip,dmg,json,yml}" }
+        with:
+          subject-path: |
+            out/*.zip
+            out/*.dmg
+            out/*.json
+            out/*.yml
       - run: gh release create "$GITHUB_REF_NAME" --verify-tag --generate-notes out/*.zip out/*.dmg out/uruvam.cdx.json out/latest-mac.yml out/SHA256SUMS
         env: { GH_TOKEN: "${{ github.token }}" }
