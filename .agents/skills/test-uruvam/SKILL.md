@@ -38,6 +38,8 @@ Run these commands in order from the repository root:
 4. `pnpm test:packaged`
 5. `pnpm test:live` when the Keychain test credential is available; this bundles the pinned v2 client through the same Vite contract used by the app
 
+To smoke-test an independently downloaded release ZIP, extract it into a disposable directory and run `URUVAM_PACKAGED_EXECUTABLE=<absolute-path-to-Uruvam.app/Contents/MacOS/Uruvam> pnpm test:packaged`. Keep the executable path out of the default command so repository packages remain the canonical local target.
+
 If a proved DeepSeek turn needs a bounded visual repair without spending another full scaffold generation, run `pnpm test:live:vision <exact-disposable-project-path>`. It re-runs deterministic 390px/1440px gates, uses MiniMax M3 for severity-based review, and sends only blocking findings through the bounded DeepSeek repair path.
 
 The packaged test connects over Chromium DevTools Protocol. Do not re-enable Electron Node inspector arguments: the production fuse must remain disabled.

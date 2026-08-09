@@ -33,9 +33,9 @@ async function connect(port: number) {
 
 test("Apple Silicon package launches with hardened fuses and isolated preload", async () => {
   const userData = mkdtempSync(join(tmpdir(), "uruvam-packaged-"));
-  const executablePath = resolve(
-    "out/Uruvam-darwin-arm64/Uruvam.app/Contents/MacOS/Uruvam",
-  );
+  const executablePath = process.env.URUVAM_PACKAGED_EXECUTABLE
+    ? resolve(process.env.URUVAM_PACKAGED_EXECUTABLE)
+    : resolve("out/Uruvam-darwin-arm64/Uruvam.app/Contents/MacOS/Uruvam");
   const port = await availablePort();
   const child = spawn(executablePath, [`--remote-debugging-port=${port}`], {
     env: { ...process.env, URUVAM_E2E: "1", URUVAM_E2E_DATA: userData },
