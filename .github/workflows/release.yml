@@ -17,6 +17,7 @@ jobs:
         with: { node-version: 24, cache: pnpm }
       - run: test "$(uname -m)" = arm64
       - run: pnpm install --frozen-lockfile
+      - run: pnpm fetch:opencode
       - run: pnpm quality
       - name: Configure isolated Apple signing credentials
         env:

@@ -26,10 +26,11 @@ The disposable project is intentionally retained for review at `/var/folders/9r/
 - The first DeepSeek render created source-owned components but left the starter `App` unwired. MiniMax correctly returned `needs-work`; the bounded repair loop then wired the interface and fixed TypeScript, contrast, and accessible progressbar defects before the final pass.
 - A local Developer ID packaging attempt reached macOS Keychain authorization but did not complete. No signed claim is made from that attempt.
 - The first local DMG attempt found that `macos-alias` had been compiled for the host Node 26 ABI while Forge runs on pinned Node 24. The canonical `make` command now rebuilds that exact dependency under Node 24 with a secret-stripped environment; the subsequent DMG/ZIP make passed.
+- The `v0.1.0-alpha.1` release run stopped during its duplicate quality gate because a fresh release checkout had not fetched the intentionally untracked pinned `opencode2` binary. No Apple credential or signing step ran. The canonical release workflow now performs the same checksum-verified binary bootstrap as the green Quality workflow before testing.
 
 ## Blocked
 
-- App Store Connect notarization credentials are configured as encrypted GitHub Actions secrets using a dedicated App Manager key. Signed/notarized distribution remains blocked only on exporting the existing Developer ID Application identity as a password-wrapped `.p12` and configuring `APPLE_CERTIFICATE_BASE64` plus `APPLE_CERTIFICATE_PASSWORD`. The release workflow has not been triggered and notarization is not claimed.
+- All signing and notarization credentials are configured as encrypted GitHub Actions secrets. The first tag stopped before credential use because of the missing binary bootstrap described above; the fixed `v0.1.0-alpha.2` release has not yet run, so notarization is not claimed.
 
 ## Untested
 
