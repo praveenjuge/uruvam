@@ -1,0 +1,23 @@
+# Real-world test findings
+
+Use these dated findings to avoid repeating failures. Add only behavior proven by the real harness; keep unresolved observations explicitly marked.
+
+## 2026-08-09
+
+- Hardened packaged Electron cannot be launched with Playwright's `_electron.launch` because Uruvam disables Node CLI inspector arguments. Launch the app normally with a loopback `--remote-debugging-port`, retry `chromium.connectOverCDP`, inspect the renderer, then send `SIGTERM` to that exact child.
+- Forge packaging can stall under Node 26 while finalizing Electron. Run Forge through the repository's pinned Node 24 command in `pnpm package` and `pnpm make`.
+- The pinned OpenCode v2 client contains extensionless ESM imports that Node 24 and Node 26 reject when loaded directly. Bundle the exact client with `vite.live.config.ts`; do not patch the dependency or add a compatibility shim.
+- The pinned binary writes its private service password to `$XDG_CONFIG_HOME/opencode/service.json` and writes discoverable service registration to `$XDG_STATE_HOME/opencode/service.json`. Pass the state path to `Service.ensure` and `Service.stop`; never inspect or report either password.
+- A failed live harness can leave the detached service running if cleanup is not process-wide. Put `Service.stop` in an outer `finally`, and when auditing a historical failure inspect only PID, version, and URL shape—never process environment or password values.
+- The live Keychain-backed catalog exposes both `opencode` and `opencode-go`; the tested Go integration advertises `OPENCODE_API_KEY` as its environment method. Report only provider/model metadata, never connection values.
+- The service health endpoint can become ready before its provider and integration catalogs finish warming. Poll the v2 catalog for up to 30 seconds; an immediate empty list is not evidence that the Keychain key failed.
+- V2 `permissions` must be an ordered rule array. An object-shaped value falls back to approval behavior and causes an unattended client session to fail before mutation. Start with a deny-all rule, then append precise in-repository read/edit, skill, pnpm, and Git allowances; keep external directories at `ask`.
+- A prompt that merely says to use a skill does not activate it. Set the v2 session `agent` to `build` and attach the skill by ID in the prompt's `skills` array; the live DeepSeek V4 Flash run then produced real source-owned shadcn files.
+- In this pinned v2 client, `session.prompt` acknowledges the turn before tool execution necessarily finishes. Call `session.wait`, tolerate its terminal client rejection, and then prove a top-level source mutation plus local gates. Neither prompt resolution nor wait rejection alone establishes success.
+- The live Go catalog reports DeepSeek V4 Flash as tool-capable text input and MiniMax M3 as tool-capable image input. Use DeepSeek for implementation and MiniMax only for the bounded 390px/1440px visual review; do not describe DeepSeek as a vision model.
+- Current TypeScript 6 removes `baseUrl`. Tell the generation contract to express `paths` without `baseUrl`, otherwise an otherwise complete direction fails the first local typecheck.
+- Seed a pinned pnpm lockfile and dependency tree before the v2 turn. Letting the model bootstrap with an ambient global pnpm can leave an incompatible `node_modules` that a later non-interactive gate refuses to purge. Also require a source mutation before claiming generation passed.
+- Give dependency and gate subprocesses an explicit bounded output buffer. Even silent pnpm installs can exceed Node's small default buffer during a real disposable-project run; classify that as harness infrastructure, not a model failure.
+- Write the disposable project's `.gitignore` before dependency seeding and the first commit. Otherwise Git attempts to index `node_modules` and local OpenCode runtime state, producing a harness failure unrelated to generation.
+- Treat MiniMax visual findings by severity. Reserve `needs-work` for blocking responsive, usability, rendering, or accessibility defects; preserve non-blocking polish opportunities in a passing report so the bounded repair loop does not churn indefinitely on subjective refinements.
+- Never read a pre-existing vision report immediately after `session.wait` rejects. Overwrite it with a non-passing sentinel before the turn and poll for a fresh schema-valid MiniMax report; otherwise stale findings can trigger a false repair or false pass.

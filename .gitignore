@@ -14,3 +14,15 @@ playwright-report/
 *.pem
 *.p12
 *.key
+node_modules/
+.vite/
+out/
+dist/
+vendor/opencode2
+test-results/
+playwright-report/
+coverage/
+.DS_Store
+*.log
+.env*
+!.env.example

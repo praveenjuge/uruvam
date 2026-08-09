@@ -1,0 +1,28 @@
+onlyBuiltDependencies:
+  - electron
+  - esbuild
+blockExoticSubdeps: false
+nodeLinker: hoisted
+strictPeerDependencies: true
+minimumReleaseAgeExclude:
+  - "@opencode-ai/cli-darwin-arm64@0.0.0-next-17055"
+  - "@opencode-ai/cli-darwin-x64-baseline@0.0.0-next-17055"
+  - "@opencode-ai/cli-darwin-x64@0.0.0-next-17055"
+  - "@opencode-ai/cli-linux-arm64-musl@0.0.0-next-17055"
+  - "@opencode-ai/cli-linux-arm64@0.0.0-next-17055"
+  - "@opencode-ai/cli-linux-x64-baseline-musl@0.0.0-next-17055"
+  - "@opencode-ai/cli-linux-x64-baseline@0.0.0-next-17055"
+  - "@opencode-ai/cli-linux-x64-musl@0.0.0-next-17055"
+  - "@opencode-ai/cli-linux-x64@0.0.0-next-17055"
+  - "@opencode-ai/cli-windows-arm64@0.0.0-next-17055"
+  - "@opencode-ai/cli-windows-x64-baseline@0.0.0-next-17055"
+  - "@opencode-ai/cli-windows-x64@0.0.0-next-17055"
+  - "@opencode-ai/cli@0.0.0-next-17055"
+  - "@opencode-ai/client@0.0.0-next-17055"
+  - "@opencode-ai/protocol@0.0.0-next-17055"
+  - "@opencode-ai/schema@0.0.0-next-17055"
+allowBuilds:
+  "@opencode-ai/cli": set this to true or false
+  fs-xattr: true
+  macos-alias: true
+  msgpackr-extract: true

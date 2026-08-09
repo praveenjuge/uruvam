@@ -1,0 +1,7 @@
+.vite
+out
+dist
+vendor
+test-results
+playwright-report
+pnpm-lock.yaml
